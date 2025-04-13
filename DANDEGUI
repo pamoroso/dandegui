@@ -1,0 +1,50 @@
+(DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "DANDEGUI" (USE "LISP" "XCL") (NICKNAMES "GUI")) READTABLE 
+"XCL" BASE 10)
+
+(IL:FILECREATED "13-Apr-2025 17:39:44" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;3| 2141   
+
+      :EDIT-BY "PA"
+
+      :CHANGES-TO (IL:FUNCTIONS OPEN-WINDOW-STREAM)
+
+      :PREVIOUS-DATE "12-Apr-2025 18:33:50" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;1|)
+
+
+(IL:PRETTYCOMPRINT IL:DANDEGUICOMS)
+
+(IL:RPAQQ IL:DANDEGUICOMS ((FILE-ENVIRONMENTS IL:DANDEGUI)
+                           (IL:P (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
+                                        (:NICKNAMES "GUI")
+                                        (:EXPORT OPEN-WINDOW-STREAM)))
+                           (IL:FUNCTIONS OPEN-WINDOW-STREAM)))
+
+(DEFINE-FILE-ENVIRONMENT IL:DANDEGUI :PACKAGE (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
+                                                     (:NICKNAMES "GUI"))
+   :READTABLE "XCL"
+   :COMPILER :COMPILE-FILE)
+
+(DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
+       (:NICKNAMES "GUI")
+       (:EXPORT OPEN-WINDOW-STREAM))
+
+(DEFUN OPEN-WINDOW-STREAM (&KEY (TITLE "Untitled"))    (IL:* IL:\; "Edited 13-Apr-2025 17:38 by PA")
+   "Open a new window and return a text stream to send output to."
+                                                       (IL:* IL:\; "Edited 12-Apr-2025 18:28 by PA")
+   (LET ((STREAM (IL:TEXTSTREAM (IL:TEDIT
+                                 NIL NIL NIL
+                                 `(IL:FONT (IL:TERMINAL 10)
+                                         IL:HISTORY IL:OFF IL:READONLY IL:QUIET 
+
+                                         (IL:* IL:|;;| 
+                                "A dummy function to suppress TEdit's  left/middle button title menu")
+
+                                         IL:TITLEMENUFN
+                                         ,#'(LAMBDA (WINDOW)
+                                                   (DECLARE (IGNORE WINDOW))
+                                                   T))))))
+        (IL:WINDOWPROP (IL:WFROMDS STREAM)
+               'IL:TITLE TITLE)
+        STREAM))
+(IL:DECLARE\: IL:DONTCOPY
+  (IL:FILEMAP (NIL (1078 2112 (OPEN-WINDOW-STREAM 1078 . 2112)))))
+IL:STOP
