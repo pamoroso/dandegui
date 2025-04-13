@@ -26,6 +26,17 @@ or:
 ```
 
 
+## Usage
+
+### API reference
+
+The functionality of DandeGUI is accessible via the following functions and macros in the `DANDEGUI` package nicknamed `GUI`.
+
+Whenever a stream is passed or returned it is intended as an Interlisp `TEXTSTREAM` to which text may be printed by any output function that takes a stream as an argument such as with `FORMAT`, `PRIN1`, and so on. However, these functions must be called only using the DandeGUI output context macros and not outside ot them.
+
+`OPEN-WINDOW-STREAM &KEY TITLE`: Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
+
+
 ## Learn more
 
 * [Medley Interlisp](https://interlisp.org)
