@@ -1,13 +1,13 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "DANDEGUI" (USE "LISP" "XCL") (NICKNAMES "GUI")) READTABLE 
 "XCL" BASE 10)
 
-(IL:FILECREATED "13-Apr-2025 17:39:44" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;3| 2141   
+(IL:FILECREATED "15-Apr-2025 19:41:22" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;5| 3043   
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (IL:FUNCTIONS OPEN-WINDOW-STREAM)
+      :CHANGES-TO (IL:FUNCTIONS WITH-WRITE-ENABLED)
 
-      :PREVIOUS-DATE "12-Apr-2025 18:33:50" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;1|)
+      :PREVIOUS-DATE "15-Apr-2025 17:46:35" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;4|)
 
 
 (IL:PRETTYCOMPRINT IL:DANDEGUICOMS)
@@ -16,7 +16,7 @@
                            (IL:P (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
                                         (:NICKNAMES "GUI")
                                         (:EXPORT OPEN-WINDOW-STREAM)))
-                           (IL:FUNCTIONS OPEN-WINDOW-STREAM)))
+                           (IL:FUNCTIONS OPEN-WINDOW-STREAM WITH-WRITE-ENABLED)))
 
 (DEFINE-FILE-ENVIRONMENT IL:DANDEGUI :PACKAGE (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
                                                      (:NICKNAMES "GUI"))
@@ -45,6 +45,23 @@
         (IL:WINDOWPROP (IL:WFROMDS STREAM)
                'IL:TITLE TITLE)
         STREAM))
+
+(DEFMACRO WITH-WRITE-ENABLED ((VAR STREAM)
+                              &BODY BODY)              (IL:* IL:\; "Edited 15-Apr-2025 19:34 by PA")
+   "Perform the operations in BODY on STREAM after enabling write access, then set it to readonly.
+Evaluates the forms in BODY in a context in which STREAM is bound to VAR and write access is enabled for STREAM, then sets STREAM back to readonly and returns the value of the last form of BODY."
+   (ONCE-ONLY (STREAM)
+          `(UNWIND-PROTECT
+               (LET ((,VAR ,STREAM))
+                    (IL:TEXTPROP ,STREAM 'IL:READONLY NIL)
+                    ,@BODY)
+
+               (IL:* IL:|;;| 
+           "Mark buffer  as not changed so the user is not prompted when to save when quitting TEdit")
+
+               (IL:TEDIT.STREAMCHANGEDP ,STREAM T)
+               (IL:TEXTPROP ,STREAM 'IL:READONLY 'IL:QUIET))))
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1078 2112 (OPEN-WINDOW-STREAM 1078 . 2112)))))
+  (IL:FILEMAP (NIL (1097 2131 (OPEN-WINDOW-STREAM 1097 . 2131)) (2133 3014 (WITH-WRITE-ENABLED 2133 . 
+3014)))))
 IL:STOP
