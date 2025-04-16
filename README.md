@@ -34,7 +34,24 @@ The functionality of DandeGUI is accessible via the following functions and macr
 
 Whenever a stream is passed or returned it is intended as an Interlisp `TEXTSTREAM` to which text may be printed by any output function that takes a stream as an argument such as with `FORMAT`, `PRIN1`, and so on. However, these functions must be called only using the DandeGUI output context macros and not outside ot them.
 
-`OPEN-WINDOW-STREAM &KEY TITLE` (function): Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
+
+#### `OPEN-WINDOW-STREAM &KEY TITLE` (function)
+
+Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
+
+
+#### `WITH-OUTPUT-TO-WINDOW (VAR &KEY TITLE) &BODY BODY` (macro)
+
+Performs the operations in `BODY` with `VAR` bound to a new window stream.
+
+Creates a new window titled `TITLE` if supplied, binds `VAR` to the `TEXTSTREAM` associated with the window, and executes `BODY` in this context. Returns the value of the last form of BODY. After control leaves the context of `WITH-OUTPUT-TO-WINDOW` the new window no longer accepts output to the associated stream.
+
+
+#### `WITH-WINDOW-STREAM (VAR STREAM) &BODY BODY` (macro)
+
+Performs the operations in `BODY` with `VAR` bound to a window `STREAM`.
+
+Evaluates the forms in `BODY` in a context in which `VAR` is bound to `STREAM` which must already exist, then returns the value of the last form of BODY.
 
 
 ## Learn more

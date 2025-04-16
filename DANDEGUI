@@ -1,13 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "DANDEGUI" (USE "LISP" "XCL") (NICKNAMES "GUI")) READTABLE 
 "XCL" BASE 10)
 
-(IL:FILECREATED "15-Apr-2025 19:41:22" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;5| 3043   
+(IL:FILECREATED "16-Apr-2025 14:20:05" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;7| 4450   
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (IL:FUNCTIONS WITH-WRITE-ENABLED)
+      :CHANGES-TO (IL:VARS IL:DANDEGUICOMS)
+                  (IL:FUNCTIONS WITH-OUTPUT-TO-WINDOW)
 
-      :PREVIOUS-DATE "15-Apr-2025 17:46:35" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;4|)
+      :PREVIOUS-DATE "16-Apr-2025 13:30:30" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;6|)
 
 
 (IL:PRETTYCOMPRINT IL:DANDEGUICOMS)
@@ -15,8 +16,10 @@
 (IL:RPAQQ IL:DANDEGUICOMS ((FILE-ENVIRONMENTS IL:DANDEGUI)
                            (IL:P (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
                                         (:NICKNAMES "GUI")
-                                        (:EXPORT OPEN-WINDOW-STREAM)))
-                           (IL:FUNCTIONS OPEN-WINDOW-STREAM WITH-WRITE-ENABLED)))
+                                        (:EXPORT OPEN-WINDOW-STREAM WITH-WINDOW-STREAM 
+                                               WITH-OUTPUT-TO-WINDOW)))
+                           (IL:FUNCTIONS OPEN-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW WITH-WINDOW-STREAM
+                                  WITH-WRITE-ENABLED)))
 
 (DEFINE-FILE-ENVIRONMENT IL:DANDEGUI :PACKAGE (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
                                                      (:NICKNAMES "GUI"))
@@ -25,7 +28,7 @@
 
 (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
        (:NICKNAMES "GUI")
-       (:EXPORT OPEN-WINDOW-STREAM))
+       (:EXPORT OPEN-WINDOW-STREAM WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW))
 
 (DEFUN OPEN-WINDOW-STREAM (&KEY (TITLE "Untitled"))    (IL:* IL:\; "Edited 13-Apr-2025 17:38 by PA")
    "Open a new window and return a text stream to send output to."
@@ -46,6 +49,26 @@
                'IL:TITLE TITLE)
         STREAM))
 
+(DEFMACRO WITH-OUTPUT-TO-WINDOW ((VAR &KEY TITLE)
+                                 &BODY BODY)           (IL:* IL:\; "Edited 16-Apr-2025 14:17 by PA")
+   "WITH-OUTPUT-TO-WINDOW (VAR &KEY TITLE) BODY
+Perform the operations in BODY with VAR bound to a new window stream.
+Opens a new window with title TITLE, binds VAR to the TEXTSTREAM associated with the window, and executes BODY in this context. Returns the value of the last form of BODY."
+   `(WITH-WINDOW-STREAM 
+
+           (IL:* IL:|;;| 
+  "If :TITLE is NIL the title bar disappear, so we must pass something non NIL to OPEN-WINDOW-STREAM")
+
+           (,VAR (OPEN-WINDOW-STREAM :TITLE (OR ,TITLE "Untitled")))
+           ,@BODY))
+
+(DEFMACRO WITH-WINDOW-STREAM ((VAR STREAM)
+                              &BODY BODY)              (IL:* IL:\; "Edited 16-Apr-2025 13:25 by PA")
+   "Perform the operations in BODY with VAR bound to a window STREAM.
+Evaluates the forms in BODY in a context in which VAR is bound to STREAM which must already exist, then returns the value of the last form of BODY."
+   `(WITH-WRITE-ENABLED (,VAR ,STREAM)
+           ,@BODY))
+
 (DEFMACRO WITH-WRITE-ENABLED ((VAR STREAM)
                               &BODY BODY)              (IL:* IL:\; "Edited 15-Apr-2025 19:34 by PA")
    "Perform the operations in BODY on STREAM after enabling write access, then set it to readonly.
@@ -62,6 +85,6 @@ Evaluates the forms in BODY in a context in which STREAM is bound to VAR and wri
                (IL:TEDIT.STREAMCHANGEDP ,STREAM T)
                (IL:TEXTPROP ,STREAM 'IL:READONLY 'IL:QUIET))))
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1097 2131 (OPEN-WINDOW-STREAM 1097 . 2131)) (2133 3014 (WITH-WRITE-ENABLED 2133 . 
-3014)))))
+  (IL:FILEMAP (NIL (1349 2383 (OPEN-WINDOW-STREAM 1349 . 2383)) (2385 3099 (WITH-OUTPUT-TO-WINDOW 2385
+ . 3099)) (3101 3538 (WITH-WINDOW-STREAM 3101 . 3538)) (3540 4421 (WITH-WRITE-ENABLED 3540 . 4421)))))
 IL:STOP
