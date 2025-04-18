@@ -2,6 +2,8 @@
 
 DandeGUI (pronounced as "dandy guy") is a Medley Interlisp library of GUI elements and facilities for programs that output simple text and graphics.
 
+![A text output window created with DandeGUI on Medley Interlisp and the Lisp code that generated it.](https://raw.githubusercontent.com/pamoroso/dandegui/main/dandegui.png)
+
 The library, which is written in and exposes its functionality as Common Lisp, provides windows for stream-based and graphical output which automaticaly handle repainting, resizing, and scrolling. DandeGUI captures typical GUI patterns of the Medley environment such as printing text to a new window instead of an Exec.
 
 
@@ -43,7 +45,7 @@ Suppose you want to display a table of square roots in new window. The table con
     do (format stream "~&~4D~40T~8,4F~%" n (sqrt n))))
 ```
 
-The variable `stream` is bound to the stream associated to a newly created window with title supplied by `:title`. The calls to `format` populate the table by printing to `stream`.
+This code produces the main window in the screenshot above. The variable `stream` is bound to the stream associated to a newly created window with title supplied by `:title`. The calls to `format` populate the table by printing to `stream`.
 
 Since `stream` is not accessible outside of the scope of the macro, `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to once it's produced. If instead you want to send output in unrelated steps, or interleave output to more than one window, `WITH-WINDOW-STREAM` is a better option:
 
