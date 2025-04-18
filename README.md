@@ -28,6 +28,57 @@ or:
 
 ## Usage
 
+The functions and macros of DandeGUI create read-only, resizable windows with scrollable content and allow to send output to these windows. Any text in the windows may be selected and copied via the usual facilities of the Medley environment.
+
+
+### Examples
+
+Suppose you want to display a table of square roots in new window. The table contains a row with the headings of two columns, one for a sequence of numbers and the other for the corresponding square roots. The simplest way to do this is to use the DandeGUI macro `WITH-OUTPUT-TO-WINDOW`:
+
+```lisp
+(gui:with-output-to-window (stream :title "Table of square roots")
+  (format stream "~&Number~40TSquare Root~2%")
+  (loop
+    for n from 1 to 30
+    do (format stream "~&~4D~40T~8,4F~%" n (sqrt n))))
+```
+
+The variable `stream` is bound to the stream associated to a newly created window with title supplied by `:title`. The calls to `format` populate the table by printing to `stream`.
+
+Since `stream` is not accessible outside of the scope of the macro, `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to once it's produced. If instead you want to send output in unrelated steps, or interleave output to more than one window, `WITH-WINDOW-STREAM` is a better option:
+
+```lisp
+(defvar *window-stream* (gui:open-window-stream :title "Output Window"))
+
+(defun print-output1 (stream)
+  (format stream "...")
+  
+  ;; ...
+  
+  (format stream "..."))
+
+(defun print-output2 (stream)
+  (format stream "...")
+  
+  ;; ...
+  
+  (format stream "..."))
+
+(defun do-something-else ()
+  ;; ...
+  )
+
+(defun main-program (stream)
+  (print-output1 stream)
+  (do-something-else)
+  (print-output2 stream))
+
+(main-program *window-stream*)
+```
+
+Function `OPEN-WINDOW-STREAM` creates a new window with title supplied by`:TITLE` and returns the associated output stream which output functions can print to. Like any other open stream, the value of `OPEN-WINDOW-STREAM` may be closed when no longer in use, for example with `CLOSE`
+
+
 ### API reference
 
 The functionality of DandeGUI is accessible via the following functions and macros in the `DANDEGUI` package nicknamed `GUI`.
