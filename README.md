@@ -78,7 +78,21 @@ Since `stream` is not accessible outside of the scope of the macro, `WITH-OUTPUT
 (main-program *window-stream*)
 ```
 
-Function `OPEN-WINDOW-STREAM` creates a new window with title supplied by`:TITLE` and returns the associated output stream which output functions can print to. Like any other open stream, the value of `OPEN-WINDOW-STREAM` may be closed when no longer in use, for example with `CLOSE`
+Function `OPEN-WINDOW-STREAM` creates a new window with title supplied by`:TITLE` and returns the associated output stream which output functions can print to. Like any other open stream, the value of `OPEN-WINDOW-STREAM` may be closed when no longer in use, for example with `CLOSE`.
+
+
+### Demos
+
+The file `GUIDEMO` provides sample code to demonstrate the features of DandeGUI and how to use them.
+
+To run the demos first load the file with `(LOAD 'GUIDEMO)`, which is not necessary to compile. If the compiled file `DANDEGUI.FASL` isn't already loaded `GUIDEMO` will load it assuming it's in the same directory or somewhere in the load path.
+
+`GUIDEMO` exports the following functions from the `GUIDEMO` package.
+
+
+#### `SQRT-TABLE &OPTIONAL N` [function]
+
+Displays in a new text window a table of the square roots of the integers up to `N`, or a default value if `N` is not supplied.
 
 
 ### API reference
