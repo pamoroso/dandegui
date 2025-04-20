@@ -107,6 +107,11 @@ Whenever a stream is passed or returned it is intended as an Interlisp `TEXTSTRE
 Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
 
 
+#### `WINDOW-TITLE STREAM` [function]
+
+Returns the title associated with `STREAM` or sets it if called from `SETF`.
+
+
 #### `WITH-OUTPUT-TO-WINDOW (VAR &KEY TITLE) &BODY BODY` [macro]
 
 Performs the operations in `BODY` with `VAR` bound to a new window stream.
