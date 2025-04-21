@@ -1,6 +1,6 @@
 # DandeGUI
 
-DandeGUI (pronounced as "dandy guy") is a Medley Interlisp library of GUI elements and facilities for programs that output simple text and graphics.
+DandeGUI (pronounced "dandy guy") is a Medley Interlisp library of GUI elements and facilities for programs that output simple text and graphics.
 
 ![A text output window created with DandeGUI on Medley Interlisp and the Lisp code that generated it.](https://raw.githubusercontent.com/pamoroso/dandegui/main/dandegui.png)
 
@@ -47,38 +47,41 @@ Suppose you want to display a table of square roots in new window. The table con
 
 This code produces the main window in the screenshot above. The variable `stream` is bound to the stream associated to a newly created window with title supplied by `:title`. The calls to `format` populate the table by printing to `stream`.
 
-Since `stream` is not accessible outside of the scope of the macro, `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to once it's produced. If instead you want to send output in unrelated steps, or interleave output to more than one window, `WITH-WINDOW-STREAM` is a better option:
+Since `stream` is not accessible outside of the scope of the macro `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to. `WITH-WINDOW-STREAM` is a better option if instead you generate the output in successive steps; from different parts of the program; or interleave output to more than one window:
 
 ```lisp
-(defvar *window-stream* (gui:open-window-stream :title "Output Window"))
-
 (defun print-output1 (stream)
-  (format stream "...")
+  (with-window-stream (str stream)
+    (format str "...")
   
-  ;; ...
+    ;; ...
   
-  (format stream "..."))
+    (format str "...")))
 
 (defun print-output2 (stream)
-  (format stream "...")
+  (with-window-stream (str stream)
+    (format str "...")
   
-  ;; ...
+    ;; ...
   
-  (format stream "..."))
+    (format str "...")))
 
 (defun do-something-else ()
   ;; ...
   )
 
-(defun main-program (stream)
-  (print-output1 stream)
-  (do-something-else)
-  (print-output2 stream))
+(defun main-program ()
+  (let ((stream (gui:open-window-stream :title "Output Window")))
+    (print-output1 stream)
+    (do-something-else)
+    (print-output2 stream)))
 
-(main-program *window-stream*)
+(main-program)
 ```
 
-Function `OPEN-WINDOW-STREAM` creates a new window with title supplied by`:TITLE` and returns the associated output stream which output functions can print to. Like any other open stream, the value of `OPEN-WINDOW-STREAM` may be closed when no longer in use, for example with `CLOSE`.
+The function `OPEN-WINDOW-STREAM` creates a new window with title supplied by`:TITLE` and returns the associated output stream which output functions can print to. The functions must be wrapped in the context `WITH-WINDOW-STREAM` establishes by binding a variable to the appropriate stream. 
+
+Like any other open stream the value of `OPEN-WINDOW-STREAM` may be closed when no longer in use, for example with `CLOSE`.
 
 
 ### Demos
