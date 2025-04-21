@@ -47,7 +47,7 @@ Suppose you want to display a table of square roots in new window. The table con
 
 This code produces the main window in the screenshot above. The variable `stream` is bound to the stream associated to a newly created window with title supplied by `:title`. The calls to `format` populate the table by printing to `stream`.
 
-Since `stream` is not accessible outside of the scope of the macro `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to. `WITH-WINDOW-STREAM` is a better option if instead you generate the output in successive steps; from different parts of the program; or interleave output to more than one window:
+Since `stream` is not accessible outside of the scope of the macro `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to. A combination of `OPEN-WINDOW-STREAM` and `WITH-WINDOW-STREAM` is a better option if instead you generate the output in successive steps; from different parts of the program; or interleave output to more than one window:
 
 ```lisp
 (defun print-output1 (stream)
