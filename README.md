@@ -131,6 +131,7 @@ Evaluates the forms in `BODY` in a context in which `VAR` is bound to `STREAM` w
 
 ## Learn more
 
+* [DandeGUI project updates](https://journal.paoloamoroso.com/tag:DandeGUI)
 * [Medley Interlisp](https://interlisp.org)
 
 
