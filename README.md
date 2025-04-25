@@ -4,7 +4,7 @@ DandeGUI (pronounced "dandy guy") is a Medley Interlisp library of GUI elements 
 
 ![A text output window created with DandeGUI on Medley Interlisp and the Lisp code that generated it.](https://raw.githubusercontent.com/pamoroso/dandegui/main/dandegui.png)
 
-The library, which is written in and exposes its functionality as Common Lisp, provides windows for stream-based and graphical output which automaticaly handle repainting, resizing, and scrolling. DandeGUI captures typical GUI patterns of the Medley environment such as printing text to a new window instead of an Exec.
+The library, which is written in and exposes its functionality as Common Lisp, provides windows for stream-based text and graphical output which automaticaly handle repainting, resizing, and scrolling. DandeGUI captures typical GUI patterns of the Medley environment such as printing text to a new window instead of an Exec.
 
 
 ## Installation
