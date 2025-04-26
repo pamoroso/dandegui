@@ -115,6 +115,13 @@ Delete the text of the window associated with `STREAM`. More output may later be
 Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
 
 
+#### `PRINT-MESSAGE STREAM MESSAGE &OPTIONAL DONT-CLEAR-P` [function]
+
+Prints the string `MESSAGE` to the prompt area of the window associated with `STREAM` and returns `STREAM`. If `DONT-CLEAR-P` is non NIL the area will be cleared first.
+
+To clear the prompt area pass the empty string as the message and `t` as the optional argument, e.g. call `(gui:print-message stream "" t)`.
+
+
 #### `WINDOW-TITLE STREAM` [function]
 
 Returns the title associated with `STREAM` or sets it if called from `SETF`.
