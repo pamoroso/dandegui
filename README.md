@@ -105,6 +105,11 @@ The functionality of DandeGUI is accessible via the following functions and macr
 Whenever a stream is passed or returned it is intended as an Interlisp `TEXTSTREAM` to which text may be printed by any output function that takes a stream as an argument such as with `FORMAT`, `PRIN1`, and so on. However, these functions must be called only using the DandeGUI output context macros and not outside ot them.
 
 
+#### `CLEAR-WINDOW STREAM` [function]
+
+Delete the text of the window associated with `STREAM`. More output may later be sent to the stream and the new text will appear at the beginning of the window.
+
+
 #### `OPEN-WINDOW-STREAM &KEY TITLE` [function]
 
 Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
