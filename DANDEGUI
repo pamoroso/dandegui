@@ -1,14 +1,13 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "DANDEGUI" (USE "LISP" "XCL") (NICKNAMES "GUI")) READTABLE 
 "XCL" BASE 10)
 
-(IL:FILECREATED "26-Apr-2025 13:45:21" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;6| 5738   
+(IL:FILECREATED "26-Apr-2025 16:47:54" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;7| 6003   
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (IL:VARS IL:DANDEGUICOMS)
-                  (IL:FUNCTIONS CLEAR-WINDOW)
+      :CHANGES-TO (IL:FUNCTIONS WITH-WRITE-ENABLED)
 
-      :PREVIOUS-DATE "20-Apr-2025 13:30:07" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;5|)
+      :PREVIOUS-DATE "26-Apr-2025 13:45:21" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;6|)
 
 
 (IL:PRETTYCOMPRINT IL:DANDEGUICOMS)
@@ -91,13 +90,19 @@ Evaluates the forms in BODY in a context in which VAR is bound to STREAM which m
            ,@BODY))
 
 (DEFMACRO WITH-WRITE-ENABLED ((VAR STREAM)
-                              &BODY BODY)              (IL:* IL:\; "Edited 15-Apr-2025 19:34 by PA")
+                              &BODY BODY)              (IL:* IL:\; "Edited 26-Apr-2025 16:44 by PA")
+                                                       (IL:* IL:\; "Edited 15-Apr-2025 19:34 by PA")
    "Perform the operations in BODY on STREAM after enabling write access, then set it to readonly.
 Evaluates the forms in BODY in a context in which STREAM is bound to VAR and write access is enabled for STREAM, then sets STREAM back to readonly and returns the value of the last form of BODY."
    (ONCE-ONLY (STREAM)
           `(UNWIND-PROTECT
                (LET ((,VAR ,STREAM))
                     (IL:TEXTPROP ,STREAM 'IL:READONLY NIL)
+
+                    (IL:* IL:|;;| 
+                    "Ensure new text is appended to the end by setting the stream pointer to EOF=-1")
+
+                    (IL:SETFILEPTR ,STREAM -1)
                     ,@BODY)
 
                (IL:* IL:|;;| 
@@ -119,7 +124,7 @@ Evaluates the forms in BODY in a context in which STREAM is bound to VAR and wri
            'IL:TITLE
            (OR ,TITLE "Untitled")))
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1689 1962 (CLEAR-WINDOW 1689 . 1962)) (1964 2998 (OPEN-WINDOW-STREAM 1964 . 2998)) (
-3000 3232 (WINDOW-TITLE 3000 . 3232)) (3234 3948 (WITH-OUTPUT-TO-WINDOW 3234 . 3948)) (3950 4387 (
-WITH-WINDOW-STREAM 3950 . 4387)) (4389 5270 (WITH-WRITE-ENABLED 4389 . 5270)))))
+  (IL:FILEMAP (NIL (1651 1924 (CLEAR-WINDOW 1651 . 1924)) (1926 2960 (OPEN-WINDOW-STREAM 1926 . 2960)) (
+2962 3194 (WINDOW-TITLE 2962 . 3194)) (3196 3910 (WITH-OUTPUT-TO-WINDOW 3196 . 3910)) (3912 4349 (
+WITH-WINDOW-STREAM 3912 . 4349)) (4351 5535 (WITH-WRITE-ENABLED 4351 . 5535)))))
 IL:STOP
