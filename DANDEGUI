@@ -1,13 +1,15 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "DANDEGUI" (USE "LISP" "XCL") (NICKNAMES "GUI")) READTABLE 
 "XCL" BASE 10)
 
-(IL:FILECREATED "26-Apr-2025 20:37:29" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;9| 6475   
+(IL:FILECREATED " 4-May-2025 17:12:36" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;10| 6814   
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (IL:FUNCTIONS CLEAR-WINDOW PRINT-MESSAGE)
+      :CHANGES-TO (IL:FUNCTIONS OPEN-WINDOW-STREAM)
+                  (IL:VARS IL:DANDEGUICOMS)
+                  (IL:VARIABLES *DEFAULT-FONT*)
 
-      :PREVIOUS-DATE "26-Apr-2025 20:27:06" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;8|)
+      :PREVIOUS-DATE "26-Apr-2025 20:37:29" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;9|)
 
 
 (IL:PRETTYCOMPRINT IL:DANDEGUICOMS)
@@ -18,12 +20,13 @@
            (FILE-ENVIRONMENTS IL:DANDEGUI)
            (IL:P (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
                         (:NICKNAMES "GUI")
-                        (:EXPORT OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE WINDOW-TITLE 
-                               WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW)))
+                        (:EXPORT *DEFAULT-FONT* OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE 
+                               WINDOW-TITLE WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW)))
            (IL:FUNCTIONS CLEAR-WINDOW OPEN-WINDOW-STREAM PRINT-MESSAGE WINDOW-TITLE 
                   WITH-OUTPUT-TO-WINDOW WITH-WINDOW-STREAM WITH-WRITE-ENABLED)
            (IL:SEDIT-FORMATS WITH-OUTPUT-TO-WINDOW WITH-WINDOW-STREAM)
-           (IL:SETFS WINDOW-TITLE)))
+           (IL:SETFS WINDOW-TITLE)
+           (IL:VARIABLES *DEFAULT-FONT*)))
 
 
 
@@ -37,8 +40,8 @@
 
 (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
        (:NICKNAMES "GUI")
-       (:EXPORT OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE WINDOW-TITLE WITH-WINDOW-STREAM 
-              WITH-OUTPUT-TO-WINDOW))
+       (:EXPORT *DEFAULT-FONT* OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE WINDOW-TITLE 
+              WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW))
 
 (DEFUN CLEAR-WINDOW (STREAM)                           (IL:* IL:\; "Edited 26-Apr-2025 20:32 by PA")
    "Delete all the text of the window associated with STREAM. Returns STREAM"
@@ -46,13 +49,13 @@
           (IL:TEDIT.DELETE STR 1 (IL:TEDIT.NCHARS STR)))
    STREAM)
 
-(DEFUN OPEN-WINDOW-STREAM (&KEY (TITLE "Untitled"))    (IL:* IL:\; "Edited 13-Apr-2025 17:38 by PA")
+(DEFUN OPEN-WINDOW-STREAM (&KEY (TITLE "Untitled"))    (IL:* IL:\; "Edited  4-May-2025 17:08 by PA")
+                                                       (IL:* IL:\; "Edited 13-Apr-2025 17:38 by PA")
    "Open a new window and return a text stream to send output to."
                                                        (IL:* IL:\; "Edited 12-Apr-2025 18:28 by PA")
    (LET ((STREAM (IL:TEXTSTREAM (IL:TEDIT
                                  NIL NIL NIL
-                                 `(IL:FONT (IL:TERMINAL 10)
-                                         IL:HISTORY IL:OFF IL:READONLY IL:QUIET 
+                                 `(IL:FONT ,*DEFAULT-FONT* IL:HISTORY IL:OFF IL:READONLY IL:QUIET 
 
                                          (IL:* IL:|;;| 
                                 "A dummy function to suppress TEdit's  left/middle button title menu")
@@ -130,9 +133,12 @@ Evaluates the forms in BODY in a context in which STREAM is bound to VAR and wri
    `(IL:WINDOWPROP (IL:WFROMDS ,STREAM)
            'IL:TITLE
            (OR ,TITLE "Untitled")))
+
+(DEFVAR *DEFAULT-FONT* (IL:FONTCREATE 'IL:TERMINAL 10)
+                       "Default font of text windows.")
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1701 1999 (CLEAR-WINDOW 1701 . 1999)) (2001 3035 (OPEN-WINDOW-STREAM 2001 . 3035)) (
-3037 3432 (PRINT-MESSAGE 3037 . 3432)) (3434 3666 (WINDOW-TITLE 3434 . 3666)) (3668 4382 (
-WITH-OUTPUT-TO-WINDOW 3668 . 4382)) (4384 4821 (WITH-WINDOW-STREAM 4384 . 4821)) (4823 6007 (
-WITH-WRITE-ENABLED 4823 . 6007)))))
+  (IL:FILEMAP (NIL (1857 2155 (CLEAR-WINDOW 1857 . 2155)) (2157 3258 (OPEN-WINDOW-STREAM 2157 . 3258)) (
+3260 3655 (PRINT-MESSAGE 3260 . 3655)) (3657 3889 (WINDOW-TITLE 3657 . 3889)) (3891 4605 (
+WITH-OUTPUT-TO-WINDOW 3891 . 4605)) (4607 5044 (WITH-WINDOW-STREAM 4607 . 5044)) (5046 6230 (
+WITH-WRITE-ENABLED 5046 . 6230)))))
 IL:STOP

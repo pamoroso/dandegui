@@ -110,14 +110,19 @@ Whenever a stream is passed or returned it is intended as an Interlisp `TEXTSTRE
 Delete the text of the window associated with `STREAM`. More output may later be sent to the stream and the new text will appear at the beginning of the window.
 
 
+#### `*DEFAULT-FONT*` [variable]
+
+The default font of text windows, which must be an Interlisp font descriptor or a font list such as `(IL:TERMINAL 10)`.
+
+
 #### `OPEN-WINDOW-STREAM &KEY TITLE` [function]
 
-Opens a new window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
+Opens a new text window and returns the associated output stream. The function sets the window title to `TITLE` if supplied.
 
 
 #### `PRINT-MESSAGE STREAM MESSAGE &OPTIONAL DONT-CLEAR-P` [function]
 
-Prints the string `MESSAGE` to the prompt area of the window associated with `STREAM` and returns `STREAM`. If `DONT-CLEAR-P` is non NIL the area will be cleared first.
+Prints the string `MESSAGE` to the prompt area of the text window associated with `STREAM` and returns `STREAM`. If `DONT-CLEAR-P` is non NIL the area will be cleared first.
 
 To clear the prompt area pass the empty string as the message and `t` as the optional argument, e.g. call `(gui:print-message stream "" t)`.
 
@@ -129,14 +134,14 @@ Returns the title associated with `STREAM` or sets it if called from `SETF`.
 
 #### `WITH-OUTPUT-TO-WINDOW (VAR &KEY TITLE) &BODY BODY` [macro]
 
-Performs the operations in `BODY` with `VAR` bound to a new window stream.
+Performs the operations in `BODY` with `VAR` bound to a new text window stream.
 
 Creates a new window titled `TITLE` if supplied, binds `VAR` to the `TEXTSTREAM` associated with the window, and executes `BODY` in this context. Returns the value of the last form of BODY. After control leaves the context of `WITH-OUTPUT-TO-WINDOW` the new window no longer accepts output to the associated stream.
 
 
 #### `WITH-WINDOW-STREAM (VAR STREAM) &BODY BODY` [macro]
 
-Performs the operations in `BODY` with `VAR` bound to a window `STREAM`.
+Performs the operations in `BODY` with `VAR` bound to a text window `STREAM`.
 
 Evaluates the forms in `BODY` in a context in which `VAR` is bound to `STREAM` which must already exist, then returns the value of the last form of BODY.
 
