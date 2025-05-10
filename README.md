@@ -47,7 +47,24 @@ Suppose you want to display a table of square roots in new window. The table con
 
 This code produces the main window in the screenshot above. The variable `stream` is bound to the stream associated to a newly created window with title supplied by `:title`. The calls to `format` populate the table by printing to `stream`.
 
-Since `stream` is not accessible outside of the scope of the macro `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to. A combination of `OPEN-WINDOW-STREAM` and `WITH-WINDOW-STREAM` is a better option if instead you generate the output in successive steps; from different parts of the program; or interleave output to more than one window:
+
+#### Changing text style
+
+The macro `WITH-TEXT-STYLE` lets you control the attributes of the text printed to a window such as the family and face of the font. Let's modify the square root table example to call `WITH-TEXT-STYLE` to print the column heading in a 12 points sans serif bold font:
+
+```lisp
+(gui:with-output-to-window (stream :title "Table of square roots")
+  (gui:with-text-style (stream :family :sans :size 12 :face :bold)
+    (format stream "~&Number~40TSquare Root~2%"))
+  (loop
+    for n from 1 to 30
+    do (format stream "~&~4D~40T~8,4F~%" n (sqrt n))))
+```
+
+
+#### Using text window streams
+
+Since `stream` is not accessible outside of the scope of the macro, `WITH-OUTPUT-TO-WINDOW` works best with one-off output you don't need to append to. A combination of `OPEN-WINDOW-STREAM` and `WITH-WINDOW-STREAM` is a better option if instead you generate the output in successive steps; from different parts of the program; or interleave output to more than one window:
 
 ```lisp
 (defun print-output1 (stream)
@@ -136,7 +153,14 @@ Returns the title associated with `STREAM` or sets it if called from `SETF`.
 
 Performs the operations in `BODY` with `VAR` bound to a new text window stream.
 
-Creates a new window titled `TITLE` if supplied, binds `VAR` to the `TEXTSTREAM` associated with the window, and executes `BODY` in this context. Returns the value of the last form of BODY. After control leaves the context of `WITH-OUTPUT-TO-WINDOW` the new window no longer accepts output to the associated stream.
+Creates a new window titled `TITLE` if supplied, binds `VAR` to the `TEXTSTREAM` associated with the window, and executes `BODY` in this context. Returns the value of the last form of `BODY`. After control leaves the context of `WITH-OUTPUT-TO-WINDOW` the new window no longer accepts output to the associated stream.
+
+
+#### `WITH-TEXT-STYLE (STREAM &KEY FAMILY SIZE FACE) &BODY BODY` [macro]
+
+Performs the operations in `BODY` in a context in which text printed to `STREAM` is rendered in the text style specified by `FAMILY`, `SIZE`, and `FACE`.
+
+`FAMILY` must be one of `:SERIF` for serif, `:SANS` for sans serif, `:FIX` for fixed width, or a keyword denoting a family name such as `:TIMESROMAN`. `FACE` must be one of `:STANDARD`, `:ITALIC`, `:BOLD`, or `:BOLDITALIC`. Returns the value of the last expression of `BODY`.
 
 
 #### `WITH-WINDOW-STREAM (VAR STREAM) &BODY BODY` [macro]

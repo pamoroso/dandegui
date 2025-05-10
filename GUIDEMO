@@ -1,12 +1,12 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "GUIDEMO" (USE "LISP" "XCL")) READTABLE "XCL" BASE 10)
 
-(IL:FILECREATED "19-Apr-2025 17:27:32" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;1| 1577   
+(IL:FILECREATED "10-May-2025 18:44:46" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;2| 1772   
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (FILE-ENVIRONMENTS IL:GUIDEMO)
-                  (IL:VARS IL:GUIDEMOCOMS)
-                  (IL:FUNCTIONS SQRT-TABLE))
+      :CHANGES-TO (IL:FUNCTIONS SQRT-TABLE)
+
+      :PREVIOUS-DATE "19-Apr-2025 17:27:32" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;1|)
 
 
 (IL:PRETTYCOMPRINT IL:GUIDEMOCOMS)
@@ -32,11 +32,13 @@
 (DEFPACKAGE "GUIDEMO" (:USE "LISP" "XCL")
        (:EXPORT SQRT-TABLE))
 
-(DEFUN SQRT-TABLE (&OPTIONAL (N 30))                   (IL:* IL:\; "Edited 19-Apr-2025 17:19 by PA")
+(DEFUN SQRT-TABLE (&OPTIONAL (N 30))                   (IL:* IL:\; "Edited 10-May-2025 18:22 by PA")
+                                                       (IL:* IL:\; "Edited 19-Apr-2025 17:19 by PA")
    "Display in a new window a table of the square roots of the integers up to N, or a default value if N is not supplied."
    (DANDEGUI:WITH-OUTPUT-TO-WINDOW (STREAM :TITLE "Table of square roots")
-          (FORMAT STREAM "~&Number~40TSquare Root~2%")
+          (DANDEGUI:WITH-TEXT-STYLE (STREAM :FAMILY :SANS :SIZE 10 :FACE :BOLD)
+                 (FORMAT STREAM "~&Number~40TSquare Root~2%"))
           (LOOP FOR I FROM 1 TO N DO (FORMAT STREAM "~&~4D~40T~8,4F~%" I (SQRT I)))))
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1097 1548 (SQRT-TABLE 1097 . 1548)))))
+  (IL:FILEMAP (NIL (1095 1743 (SQRT-TABLE 1095 . 1743)))))
 IL:STOP
