@@ -158,7 +158,7 @@ Creates a new window titled `TITLE` if supplied, binds `VAR` to the `TEXTSTREAM`
 
 #### `WITH-TEXT-STYLE (STREAM &KEY FAMILY SIZE FACE) &BODY BODY` [macro]
 
-Performs the operations in `BODY` in a context in which text printed to `STREAM` is rendered in the text style specified by `FAMILY`, `SIZE`, and `FACE`.
+Performs the operations in `BODY` in a context in which text printed to `STREAM` is rendered in the text style specified by `FAMILY`, `SIZE`, and `FACE`. Uses `*DEFAULT-FONT*` if no matching style is available.
 
 `FAMILY` must be one of `:SERIF` for serif, `:SANS` for sans serif, `:FIX` for fixed width, or a keyword denoting a family name such as `:TIMESROMAN`. `FACE` must be one of `:STANDARD`, `:ITALIC`, `:BOLD`, or `:BOLDITALIC`. Returns the value of the last expression of `BODY`.
 
