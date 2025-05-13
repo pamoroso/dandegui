@@ -1,6 +1,6 @@
 # DandeGUI
 
-DandeGUI (pronounced "dandy guy") is a Medley Interlisp library of GUI elements and facilities for programs that output simple text and graphics.
+DandeGUI (pronounced "dandy-goo-ee") is a Medley Interlisp library of GUI elements and facilities for programs that output simple text and graphics.
 
 ![A text output window created with DandeGUI on Medley Interlisp and the Lisp code that generated it.](https://raw.githubusercontent.com/pamoroso/dandegui/main/dandegui.png)
 
