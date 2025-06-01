@@ -134,7 +134,7 @@ To run the demos first load the file with `(LOAD 'GUIDEMO)`, which is not necess
 Draw a pattern of triangular fractals in a new window. The pattern has a size of `WIDTH` by `HEIGHT` pixels which both have defaults.
 
 
-#### `RANDOM-CIRCLES &KEY N MAX-R WIDTH HEIGHT` [fnction]
+#### `RANDOM-CIRCLES &KEY N MAX-R WIDTH HEIGHT` [function]
 
 Draw `N` random filled circles in a new window. The circles are filled with a random shade, have a maximum radius `MAX-R`, and are drawn in an area of `WIDTH` by `HEIGHT` pixels. `N`, `MAX-R`, `WIDTH`, and `HEIGHT` have suitable defaults.
 
