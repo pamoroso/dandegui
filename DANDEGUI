@@ -1,14 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "DANDEGUI" (USE "LISP" "XCL") (NICKNAMES "GUI")) READTABLE 
 "XCL" BASE 10)
 
-(IL:FILECREATED "10-May-2025 18:44:39" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;16| 9375   
+(IL:FILECREATED "31-May-2025 17:29:16" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;19| 13214  
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (IL:SEDIT-FORMATS WITH-TEXT-STYLE)
-                  (IL:FUNCTIONS TEXT-STYLE-TO-FD)
+      :CHANGES-TO (IL:SETFS WINDOW-TITLE)
+                  (IL:FUNCTIONS CLEAR-WINDOW PRINT-MESSAGE WINDOW-TITLE)
 
-      :PREVIOUS-DATE "10-May-2025 18:07:06" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;15|)
+      :PREVIOUS-DATE "25-May-2025 19:44:40" IL:|{DSK}<home>paolo>il>dandegui>DANDEGUI.;18|)
 
 
 (IL:PRETTYCOMPRINT IL:DANDEGUICOMS)
@@ -19,15 +19,18 @@
            (FILE-ENVIRONMENTS IL:DANDEGUI)
            (IL:P (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
                         (:NICKNAMES "GUI")
-                        (:EXPORT *DEFAULT-FONT* OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE 
-                               WINDOW-TITLE WITH-TEXT-STYLE WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW)
-                        ))
-           (IL:FUNCTIONS CLEAR-WINDOW FONT-FAMILY-TO-SYM OPEN-WINDOW-STREAM PRINT-MESSAGE 
-                  TEXT-STYLE-TO-FD WINDOW-TITLE WITH-OUTPUT-TO-WINDOW WITH-TEXT-STYLE 
-                  WITH-WINDOW-STREAM WITH-WRITE-ENABLED)
-           (IL:SEDIT-FORMATS WITH-OUTPUT-TO-WINDOW WITH-TEXT-STYLE WITH-WINDOW-STREAM)
+                        (:EXPORT *DEFAULT-FONT* OPEN-GRAPHICS-STREAM OPEN-WINDOW-STREAM CLEAR-WINDOW
+                               PRINT-MESSAGE WINDOW-TITLE WITH-TEXT-STYLE WITH-GRAPHICS-STREAM 
+                               WITH-GRAPHICS-WINDOW WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW)))
+           (IL:FUNCTIONS CLEAR-WINDOW FONT-FAMILY-TO-SYM OPEN-GRAPHICS-STREAM OPEN-WINDOW-STREAM 
+                  PRINT-MESSAGE TEXT-STYLE-TO-FD WINDOW-TITLE WITH-GRAPHICS-STREAM 
+                  WITH-GRAPHICS-WINDOW WITH-OUTPUT-TO-WINDOW WITH-TEXT-STYLE WITH-WINDOW-STREAM 
+                  WITH-WRITE-ENABLED)
+           (IL:SEDIT-FORMATS WITH-GRAPHICS-STREAM WITH-GRAPHICS-WINDOW WITH-OUTPUT-TO-WINDOW 
+                  WITH-TEXT-STYLE WITH-WINDOW-STREAM)
            (IL:SETFS WINDOW-TITLE)
-           (IL:VARIABLES *DEFAULT-FONT*)))
+           (IL:VARIABLES *DEFAULT-FONT*)
+           (IL:FILES IL:SKETCH IL:SKETCH-STREAM)))
 
 
 
@@ -41,14 +44,28 @@
 
 (DEFPACKAGE "DANDEGUI" (:USE "LISP" "XCL")
        (:NICKNAMES "GUI")
-       (:EXPORT *DEFAULT-FONT* OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE WINDOW-TITLE 
-              WITH-TEXT-STYLE WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW))
+       (:EXPORT *DEFAULT-FONT* OPEN-GRAPHICS-STREAM OPEN-WINDOW-STREAM CLEAR-WINDOW PRINT-MESSAGE 
+              WINDOW-TITLE WITH-TEXT-STYLE WITH-GRAPHICS-STREAM WITH-GRAPHICS-WINDOW 
+              WITH-WINDOW-STREAM WITH-OUTPUT-TO-WINDOW))
 
-(DEFUN CLEAR-WINDOW (STREAM)                           (IL:* IL:\; "Edited 26-Apr-2025 20:32 by PA")
-   "Delete all the text of the window associated with STREAM. Returns STREAM"
-   (WITH-WRITE-ENABLED (STR STREAM)
-          (IL:TEDIT.DELETE STR 1 (IL:TEDIT.NCHARS STR)))
-   STREAM)
+(DEFUN CLEAR-WINDOW (STREAM)                           (IL:* IL:\; "Edited 31-May-2025 16:53 by PA")
+                                                       (IL:* IL:\; "Edited 26-Apr-2025 20:32 by PA")
+   "Clear the text or graphics window associated with STREAM.
+Returns STREAM."
+   (COND
+      ((IL:TEXTSTREAMP STREAM)
+       (WITH-WRITE-ENABLED (STR STREAM)
+              (IL:TEDIT.DELETE STR 1 (IL:TEDIT.NCHARS STR))
+              STREAM))
+      ((IL:IMAGESTREAMP STREAM)
+       (IL:DSPRESET STREAM)
+
+       (IL:* IL:|;;| 
+       "DSPRESET sets the bottom margin to the top minus one line of text, so set it to the origin")
+
+       (IL:DSPBOTTOMMARGIN 0 STREAM)
+       STREAM)
+      (T STREAM)))
 
 (DEFUN FONT-FAMILY-TO-SYM (FAMILY)                     (IL:* IL:\; "Edited 10-May-2025 17:54 by PA")
    "Return the Interlisp symbol of the font family name that best matches FAMILY.
@@ -59,6 +76,26 @@ FAMILY must be one of :SERIF, :SANS, :FIX, or a keyword denoting a family name. 
        (FIND-SYMBOL (SYMBOL-NAME FAMILY)
               (FIND-PACKAGE "IL"))
        (IL:FONTPROP *DEFAULT-FONT* 'IL:FAMILY)))
+
+(DEFUN OPEN-GRAPHICS-STREAM (&KEY (TITLE "Untitled"))  (IL:* IL:\; "Edited 25-May-2025 17:47 by PA")
+   "Open a new window and return the associated IMAGESTREAM to send graphics output to.
+Sets the window title to TITLE if supplied."
+   (LET* ((STREAM (IL:OPENIMAGESTREAM '|Untitled| 'IL:SKETCH '(IL:FONTS ,*DEFAULT-FONT*)))
+          (WINDOW (IL:\\SKSTRM.WINDOW.FROM.STREAM STREAM)))
+         (IL:WINDOWPROP WINDOW 'IL:TITLE TITLE)
+
+         (IL:* IL:|;;| "Disable left and middle-click title bar menu")
+
+         (IL:WINDOWPROP WINDOW 'IL:BUTTONEVENTFN NIL)
+
+         (IL:* IL:|;;| "Disable sketch editing via right-click actions")
+
+         (IL:WINDOWPROP WINDOW 'IL:RIGHTBUTTONFN NIL)
+
+         (IL:* IL:|;;| "Disable querying the user whether to save changes")
+
+         (IL:WINDOWPROP WINDOW 'IL:DONTQUERYCHANGES T)
+         STREAM))
 
 (DEFUN OPEN-WINDOW-STREAM (&KEY (TITLE "Untitled"))    (IL:* IL:\; "Edited  4-May-2025 17:08 by PA")
                                                        (IL:* IL:\; "Edited 13-Apr-2025 17:38 by PA")
@@ -80,9 +117,16 @@ FAMILY must be one of :SERIF, :SANS, :FIX, or a keyword denoting a family name. 
         STREAM))
 
 (DEFUN PRINT-MESSAGE (STREAM MESSAGE &OPTIONAL DONT-CLEAR-P)
+                                                       (IL:* IL:\; "Edited 31-May-2025 17:26 by PA")
                                                        (IL:* IL:\; "Edited 26-Apr-2025 20:36 by PA")
-   "Print MESSAGE to the prompt area of the window associated with STREAM. If DONT-CLEAR-P is non NIL the area will be cleared first. Returns STREAM."
-   (IL:TEDIT.PROMPTPRINT STREAM MESSAGE (NOT DONT-CLEAR-P))
+   "Print MESSAGE to the prompt area of the window associated with STREAM if it is a text stream, to the system prompt window otherwise.
+If DONT-CLEAR-P is non NIL the area or prompt window will be cleared first. Returns STREAM."
+   (IF (IL:TEXTSTREAMP STREAM)
+       (IL:TEDIT.PROMPTPRINT STREAM MESSAGE (NOT DONT-CLEAR-P))
+       (IF DONT-CLEAR-P
+           (PROGN (IL:FRESHLINE IL:PROMPTWINDOW)
+                  (PRINC MESSAGE IL:PROMPTWINDOW))
+           (IL:PROMPTPRINT MESSAGE)))
    STREAM)
 
 (DEFUN TEXT-STYLE-TO-FD (FAMILY SIZE FACE)             (IL:* IL:\; "Edited 10-May-2025 18:40 by PA")
@@ -99,10 +143,31 @@ FACE must be one of :STANDARD, :ITALIC, :BOLD, or :BOLDITALIC. Returns NIL if no
                                    (LIST 'IL:NOERROR T)))))
         (IL:FONTCOPY *DEFAULT-FONT* PROPS)))
 
-(DEFUN WINDOW-TITLE (STREAM)                           (IL:* IL:\; "Edited 20-Apr-2025 13:02 by PA")
+(DEFUN WINDOW-TITLE (STREAM)                           (IL:* IL:\; "Edited 31-May-2025 17:05 by PA")
+                                                       (IL:* IL:\; "Edited 20-Apr-2025 13:02 by PA")
    "Return the title of the window associated with STREAM."
-   (IL:WINDOWPROP (IL:WFROMDS STREAM)
-          'IL:TITLE))
+   (LET ((WINDOW (COND
+                    ((IL:TEXTSTREAMP STREAM)
+                     (IL:WFROMDS STREAM))
+                    ((IL:IMAGESTREAMP STREAM)
+                     (IL:\\SKSTRM.WINDOW.FROM.STREAM STREAM))
+                    (T NIL))))
+        (WHEN WINDOW
+            (IL:WINDOWPROP WINDOW 'IL:TITLE))))
+
+(DEFMACRO WITH-GRAPHICS-STREAM ((VAR STREAM)
+                                &BODY BODY)            (IL:* IL:\; "Edited 25-May-2025 17:55 by PA")
+   "Perform the operations in BODY with VAR bound to the graphics window STREAM.
+Evaluates the forms in BODY in a context in which VAR is bound to STREAM which must already exist, then returns the value of the last form of BODY."
+   `(LET ((,VAR ,STREAM))
+         ,@BODY))
+
+(DEFMACRO WITH-GRAPHICS-WINDOW ((VAR &KEY TITLE)
+                                &BODY BODY)            (IL:* IL:\; "Edited 25-May-2025 19:37 by PA")
+   "Perform the operations in BODY with VAR bound to a new graphics window stream.
+Creates a new window titled TITLE if supplied, binds VAR to the IMAGESTREAM associated with the window, and executes BODY in this context. Returns the value of the last form of BODY."
+   `(WITH-GRAPHICS-STREAM (,VAR (OPEN-GRAPHICS-STREAM :TITLE (OR ,TITLE "Untitled")))
+           ,@BODY))
 
 (DEFMACRO WITH-OUTPUT-TO-WINDOW ((VAR &KEY TITLE)
                                  &BODY BODY)           (IL:* IL:\; "Edited 16-Apr-2025 14:17 by PA")
@@ -156,6 +221,10 @@ Evaluates the forms in BODY in a context in which STREAM is bound to VAR and wri
                (IL:TEDIT.STREAMCHANGEDP ,STREAM T)
                (IL:TEXTPROP ,STREAM 'IL:READONLY 'IL:QUIET))))
 
+(SEDIT:DEF-LIST-FORMAT WITH-GRAPHICS-STREAM WITH-OPEN-STREAM)
+
+(SEDIT:DEF-LIST-FORMAT WITH-GRAPHICS-WINDOW WITH-OPEN-STREAM)
+
 (SEDIT:DEF-LIST-FORMAT WITH-OUTPUT-TO-WINDOW WITH-OPEN-STREAM)
 
 (SEDIT:DEF-LIST-FORMAT WITH-TEXT-STYLE WITH-OPEN-STREAM)
@@ -163,20 +232,29 @@ Evaluates the forms in BODY in a context in which STREAM is bound to VAR and wri
 (SEDIT:DEF-LIST-FORMAT WITH-WINDOW-STREAM WITH-OPEN-STREAM)
 
 (DEFSETF WINDOW-TITLE (STREAM) (TITLE)
-   "Set to TITLE the title of the window associated with STREAM."
+   "Set to TITLE the title of the window associated with STREAM.
+Returns the previous title."
 
    (IL:* IL:|;;| "TITLE must  not be NIL otherwise the title bar of the window gets hidden")
 
-   `(IL:WINDOWPROP (IL:WFROMDS ,STREAM)
-           'IL:TITLE
-           (OR ,TITLE "Untitled")))
+   `(LET ((WINDOW (COND
+                     ((IL:TEXTSTREAMP ,STREAM)
+                      (IL:WFROMDS ,STREAM))
+                     ((IL:IMAGESTREAMP ,STREAM)
+                      (IL:\\SKSTRM.WINDOW.FROM.STREAM ,STREAM))
+                     (T NIL))))
+         (WHEN WINDOW
+             (IL:WINDOWPROP WINDOW 'IL:TITLE (OR ,TITLE "Untitled")))))
 
 (DEFVAR *DEFAULT-FONT* (IL:FONTCREATE 'IL:TERMINAL 10)
                        "Default font of text windows.")
+
+(IL:FILESLOAD IL:SKETCH IL:SKETCH-STREAM)
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1961 2259 (CLEAR-WINDOW 1961 . 2259)) (2261 2887 (FONT-FAMILY-TO-SYM 2261 . 2887)) (
-2889 3990 (OPEN-WINDOW-STREAM 2889 . 3990)) (3992 4387 (PRINT-MESSAGE 3992 . 4387)) (4389 5401 (
-TEXT-STYLE-TO-FD 4389 . 5401)) (5403 5635 (WINDOW-TITLE 5403 . 5635)) (5637 6351 (
-WITH-OUTPUT-TO-WINDOW 5637 . 6351)) (6353 7104 (WITH-TEXT-STYLE 6353 . 7104)) (7106 7543 (
-WITH-WINDOW-STREAM 7106 . 7543)) (7545 8729 (WITH-WRITE-ENABLED 7545 . 8729)))))
+  (IL:FILEMAP (NIL (2312 3043 (CLEAR-WINDOW 2312 . 3043)) (3045 3671 (FONT-FAMILY-TO-SYM 3045 . 3671)) (
+3673 4536 (OPEN-GRAPHICS-STREAM 3673 . 4536)) (4538 5639 (OPEN-WINDOW-STREAM 4538 . 5639)) (5641 6421 
+(PRINT-MESSAGE 5641 . 6421)) (6423 7435 (TEXT-STYLE-TO-FD 6423 . 7435)) (7437 8036 (WINDOW-TITLE 7437
+ . 8036)) (8038 8469 (WITH-GRAPHICS-STREAM 8038 . 8469)) (8471 9013 (WITH-GRAPHICS-WINDOW 8471 . 9013)
+) (9015 9729 (WITH-OUTPUT-TO-WINDOW 9015 . 9729)) (9731 10482 (WITH-TEXT-STYLE 9731 . 10482)) (10484 
+10921 (WITH-WINDOW-STREAM 10484 . 10921)) (10923 12107 (WITH-WRITE-ENABLED 10923 . 12107)))))
 IL:STOP

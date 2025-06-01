@@ -1,22 +1,23 @@
 (DEFINE-FILE-INFO PACKAGE (DEFPACKAGE "GUIDEMO" (USE "LISP" "XCL")) READTABLE "XCL" BASE 10)
 
-(IL:FILECREATED "10-May-2025 18:44:46" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;2| 1772   
+(IL:FILECREATED " 1-Jun-2025 13:11:24" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;5| 3489   
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (IL:FUNCTIONS SQRT-TABLE)
+      :CHANGES-TO (IL:FUNCTIONS RANDOM-CIRCLES)
 
-      :PREVIOUS-DATE "19-Apr-2025 17:27:32" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;1|)
+      :PREVIOUS-DATE "29-May-2025 14:14:48" IL:|{DSK}<home>paolo>il>dandegui>GUIDEMO.;4|)
 
 
 (IL:PRETTYCOMPRINT IL:GUIDEMOCOMS)
 
-(IL:RPAQQ IL:GUIDEMOCOMS ((IL:* IL:|DandeGUI| IL:|demos| IL:|and| IL:|sample| IL:|code.|)
-                          (FILE-ENVIRONMENTS IL:GUIDEMO)
-                          (IL:FILES IL:DANDEGUI)
-                          (IL:P (DEFPACKAGE "GUIDEMO" (:USE "LISP" "XCL")
-                                       (:EXPORT SQRT-TABLE)))
-                          (IL:FUNCTIONS SQRT-TABLE)))
+(IL:RPAQQ IL:GUIDEMOCOMS
+          ((IL:* IL:|DandeGUI| IL:|demos| IL:|and| IL:|sample| IL:|code.|)
+           (FILE-ENVIRONMENTS IL:GUIDEMO)
+           (IL:FILES IL:DANDEGUI)
+           (IL:P (DEFPACKAGE "GUIDEMO" (:USE "LISP" "XCL")
+                        (:EXPORT SQRT-TABLE FRACTAL-TRIANGLES RANDOM-CIRCLES)))
+           (IL:FUNCTIONS FRACTAL-TRIANGLES RANDOM-CIRCLES SQRT-TABLE)))
 
 
 
@@ -30,7 +31,39 @@
 (IL:FILESLOAD IL:DANDEGUI)
 
 (DEFPACKAGE "GUIDEMO" (:USE "LISP" "XCL")
-       (:EXPORT SQRT-TABLE))
+       (:EXPORT SQRT-TABLE FRACTAL-TRIANGLES RANDOM-CIRCLES))
+
+(DEFUN FRACTAL-TRIANGLES (&KEY (WIDTH 300)
+                               (HEIGHT 300))           (IL:* IL:\; "Edited 28-May-2025 08:43 by PA")
+   "Draw in a new window a pattern of triangular fractals.
+The pattern has a size of WIDTH by HEIGHT pixels."
+   (DANDEGUI:WITH-GRAPHICS-WINDOW (STREAM :TITLE "Fractal Triangles")
+          (DOTIMES (X WIDTH)
+              (DOTIMES (Y HEIGHT)
+                  (WHEN (ZEROP (MOD (LOGIOR X Y)
+                                    7))
+                        (IL:DRAWPOINT X Y NIL STREAM))))))
+
+(DEFUN RANDOM-CIRCLES (&KEY (N 200)
+                            (MAX-R 50)
+                            (WIDTH 640)
+                            (HEIGHT 480))              (IL:* IL:\; "Edited  1-Jun-2025 13:10 by PA")
+                                                       (IL:* IL:\; "Edited 29-May-2025 14:12 by PA")
+   "Draw N random filled circles in a new window. The circles are filled with a random shade, have a maximum radius MAX-R, and are drawn in an area of WIDTH by HEIGHT pixels."
+   (LET ((RANGE-X (- WIDTH (* 2 MAX-R)))
+         (RANGE-Y (- HEIGHT (* 2 MAX-R)))
+
+         (IL:* IL:|;;| " A shade is an integer in the range 0..65535")
+
+         (SHADES (LIST IL:BLACKSHADE IL:GRAYSHADE (RANDOM 65536))))
+        (DANDEGUI:WITH-GRAPHICS-WINDOW (STREAM :TITLE "Random Circles")
+               (DOTIMES (I N)
+                   (DECLARE (IGNORE I))
+                   (IL:FILLCIRCLE (+ MAX-R (RANDOM RANGE-X))
+                          (+ MAX-R (RANDOM RANGE-Y))
+                          (RANDOM MAX-R)
+                          (ELT SHADES (RANDOM 3))
+                          STREAM)))))
 
 (DEFUN SQRT-TABLE (&OPTIONAL (N 30))                   (IL:* IL:\; "Edited 10-May-2025 18:22 by PA")
                                                        (IL:* IL:\; "Edited 19-Apr-2025 17:19 by PA")
@@ -40,5 +73,6 @@
                  (FORMAT STREAM "~&Number~40TSquare Root~2%"))
           (LOOP FOR I FROM 1 TO N DO (FORMAT STREAM "~&~4D~40T~8,4F~%" I (SQRT I)))))
 (IL:DECLARE\: IL:DONTCOPY
-  (IL:FILEMAP (NIL (1095 1743 (SQRT-TABLE 1095 . 1743)))))
+  (IL:FILEMAP (NIL (1133 1679 (FRACTAL-TRIANGLES 1133 . 1679)) (1681 2810 (RANDOM-CIRCLES 1681 . 2810)) 
+(2812 3460 (SQRT-TABLE 2812 . 3460)))))
 IL:STOP
